@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtro de Imóveis</title>
+    <style>
+        /* Resetando margens e padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Container principal */
+        .filter-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-container h2 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        /* Usando Flexbox para organizar os filtros lado a lado */
+        .filter-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        /* Estilo para os campos de input e select */
+        .filter-form label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .filter-form input, .filter-form select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #fafafa;
+            transition: border-color 0.3s;
+        }
+
+        .filter-form input:focus, .filter-form select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        /* Estilo para o botão de filtro */
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Lista de imóveis */
+        .property-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .property {
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .property:hover {
+            transform: scale(1.05);
+        }
+
+        .property img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .property h3 {
+            font-size: 18px;
+            margin: 15px 0 10px;
+            color: #333;
+        }
+
+        .property p {
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Formulário de Filtro -->
+    <div class="filter-container">
+        <h2>Filtros de Imóveis</h2>
+        <form id="filter-form" class="filter-form">
+            <div class="filter-item">
+                <label for="type">Tipo de Imóvel:</label>
+                <select id="type" name="type">
+                    <option value="todos">Todos</option>
+                    <option value="apartamento">Apartamento</option>
+                    <option value="casa">Casa</option>
+                </select>
+            </div>
+
+            <div class="filter-item">
+                <label for="price">Preço Máximo (R$):</label>
+                <input type="number" id="price" name="price" placeholder="Ex: 500000">
+            </div>
+
+            <div class="filter-item">
+                <label for="rooms">Número de Quartos:</label>
+                <input type="number" id="rooms" name="rooms" placeholder="Ex: 3">
+            </div>
+
+            <div class="filter-item">
+                <label for="location">Localização:</label>
+                <input type="text" id="location" name="location" placeholder="Ex: São Paulo">
+            </div>
+
+            <button type="button" onclick="filterProperties()">Aplicar Filtros</button>
+        </form>
+    </div>
+
+    <!-- Área onde os imóveis filtrados serão exibidos -->
+    <div id="property-list" class="property-list"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function filterProperties() {
+            const type = document.getElementById('type').value;
+            const price = document.getElementById('price').value;
+            const rooms = document.getElementById('rooms').value;
+            const location = document.getElementById('location').value;
+
+            const data = {
+                action: 'filter_properties',
+                type: type,
+                price: price,
+                rooms: rooms,
+                location: location
+            };
+
+            jQuery.post(ajaxurl, data, function(response) {
+                document.getElementById('property-list').innerHTML = response;
+            });
+        }
+    </script>
+</body>
+</html>
